@@ -31,6 +31,10 @@ public final class Season {
         this.userThatRated=new ArrayList<>();
     }
 
+    public ArrayList<String> getUserThatRated() {
+        return userThatRated;
+    }
+
     public int getDuration() {
         return duration;
     }
@@ -45,6 +49,16 @@ public final class Season {
 
     public void setRatings(final List<Double> ratings) {
         this.ratings = ratings;
+    }
+
+    public Double medieRating() {
+        Double sum = 0.0;
+        sum=this.ratings.stream().mapToDouble(a -> a).sum();
+        Double medie = 0.0;
+        if (this.ratings.size() != 0){
+            medie=sum/this.ratings.size();
+        }
+        return medie;
     }
 
     @Override

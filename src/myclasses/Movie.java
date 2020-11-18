@@ -28,6 +28,16 @@ public final class Movie extends ShowInput {
         return duration;
     }
 
+    public Double medieRating() {
+        Double sum;
+        sum = this.ratings.stream().mapToDouble(a -> a).sum();
+        Double medie = 0.0;
+        if (this.ratings.size() != 0){
+            medie=sum/this.ratings.size();
+        }
+        return medie;
+    }
+
     @Override
     public String toString() {
         return "MovieInputData{" + "title= "

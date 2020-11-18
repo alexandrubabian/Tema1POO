@@ -79,7 +79,7 @@ public final class User {
             int userNoRating1 = o1.getNumberOfRatings();
             int userNoRating2 = o2.getNumberOfRatings();
 
-            return userNoRating1-userNoRating2;
+            return userNoRating1 - userNoRating2;
         }
     };
 
@@ -89,7 +89,7 @@ public final class User {
             int userNoRating1 = o1.getNumberOfRatings();
             int userNoRating2 = o2.getNumberOfRatings();
 
-            return userNoRating2-userNoRating1;
+            return userNoRating2 - userNoRating1;
         }
     };
     @Override

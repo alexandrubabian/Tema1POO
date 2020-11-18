@@ -36,6 +36,18 @@ public final class SerialInputData extends ShowInput {
         return seasons;
     }
 
+    public Double medieRating() {
+        Double sum = 0.0;
+        for (Season iterator : this.seasons) {
+            sum += iterator.medieRating();
+        }
+        Double medie = 0.0;
+        if (this.seasons.size() != 0) {
+            medie = sum / this.seasons.size();
+        }
+        return medie;
+    }
+
     @Override
     public String toString() {
         return "SerialInputData{" + " title= "
