@@ -14,6 +14,8 @@ import myclasses.ParsingInput;
 import myclasses.ParsingInputLoader;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import query.AverageActor;
+import query.QueryAwards;
 import query.QueryUsers;
 
 import javax.swing.*;
@@ -105,7 +107,18 @@ public final class Main {
                 if (actiune.getObjectType().equals("users")) {
                     QueryUsers queryUsers = new QueryUsers(actiune, parsingInput, fileWriter);
                     arrayResult.add(queryUsers.result());
+                } else {
+                    if(actiune.getObjectType().equals("actors")) {
+                        if(actiune.getCriteria().equals("average")) {
+                            AverageActor averageActor = new AverageActor(actiune, parsingInput, fileWriter);
+                            arrayResult.add(averageActor.result());
+                        } else if (actiune.getCriteria().equals("awards")){
+                            QueryAwards queryAwards = new QueryAwards(actiune, parsingInput, fileWriter);
+                            arrayResult.add(queryAwards.result());
+                        }
+                    }
                 }
+
             }
         //TODO add here the entry point to your implementation
         //arrayResult.add(JSONObject)

@@ -59,31 +59,43 @@ public class Rating {
         String message = null;
         Movie movie;
         SerialInputData serial;
+
+        //message = "error -> " + this.actiune.getTitle() + " has been already rated";
         movie=returnMovie(this.actiune.getTitle());
             if (movie!=null) {
-                //cazul in care este film nu serial
-                if (user.getHistory().containsKey(movie.getTitle())) {
-                    movie.getRatings().add(this.actiune.getGrade());
-                    user.getRatings().add(this.actiune.getGrade());
-                    user.incrementRatings();
-                    user.getRatedVideos().add(this.actiune.getTitle());
-                    message = "success -> " + this.actiune.getTitle() + " was rated with " + this.actiune.getGrade() +
-                            " by " + this.actiune.getUsername();
+                if(user.getRatedVideos().contains(this.actiune.getTitle())){
+                    message = "error -> " + this.actiune.getTitle() + " has been already rated";
                 } else {
-                    message = "error -> " + movie.getTitle() + " is not seen";
+                //cazul in care este film nu serial
+                    if (user.getHistory().containsKey(movie.getTitle())) {
+                        movie.getRatings().add(this.actiune.getGrade());
+                        user.getRatings().add(this.actiune.getGrade());
+                        user.incrementRatings();
+                        user.getRatedVideos().add(this.actiune.getTitle());
+                        message = "success -> " + this.actiune.getTitle() + " was rated with " + this.actiune.getGrade() +
+                                " by " + this.actiune.getUsername();
+                    } else {
+                        message = "error -> " + movie.getTitle() + " is not seen";
+                    }
                 }
             } else {
-                serial=returnSerial(this.actiune.getTitle());
-                if (user.getHistory().containsKey(serial.getTitle())) {
-                    serial.getSeasons().get(this.actiune.getSeasonNumber()-1).getRatings().add(this.actiune.getGrade());
-                    user.getRatings().add(this.actiune.getGrade());
-                    user.incrementRatings();
-                    message="success -> " + this.actiune.getTitle() + " was rated with " + this.actiune.getGrade() +
-                            " by " + this.actiune.getUsername();
-                    //nu, vezi ca aici userul poate sa dea rating per sezon
-                    user.getRatedVideos().add(this.actiune.getTitle());
+                serial = returnSerial(this.actiune.getTitle());
+                if (serial.getSeasons().get(this.actiune.getSeasonNumber() - 1).
+                        getUserThatRated().contains(user.getUsername())) {
+                    message = "error -> " + this.actiune.getTitle() + " has been already rated";
                 } else {
-                    message = "error -> " + serial.getTitle() + " is not seen";
+                    if (user.getHistory().containsKey(serial.getTitle())) {
+                        serial.getSeasons().get(this.actiune.getSeasonNumber() - 1).getRatings().add(this.actiune.getGrade());
+                        serial.getSeasons().get(this.actiune.getSeasonNumber() - 1).getUserThatRated().add(user.getUsername());
+                        user.getRatings().add(this.actiune.getGrade());
+                        user.incrementRatings();
+                        message = "success -> " + this.actiune.getTitle() + " was rated with " + this.actiune.getGrade() +
+                                " by " + this.actiune.getUsername();
+
+                        user.getRatedVideos().add(this.actiune.getTitle());
+                    } else {
+                        message = "error -> " + serial.getTitle() + " is not seen";
+                    }
                 }
             }
 

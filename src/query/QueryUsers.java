@@ -43,7 +43,7 @@ public class QueryUsers {
         return mostActiveUsers;
     }
 
-    public void sortedUsers() {
+    public void setSortedUsers() {
         //this function set the mostActiveUsers
         ArrayList<User> copy= new ArrayList<>(this.parsingInput.getUsers());
         if(this.actiune.getSortType().equals("asc")) {
@@ -68,7 +68,7 @@ public class QueryUsers {
 
     public org.json.simple.JSONObject result() throws IOException {
         String message = null;
-        this.sortedUsers();
+        this.setSortedUsers();
         message = "Query result: " + this.mostActiveUsers.toString();
         return this.fileWriter.writeFile(this.actiune.getActionId(), null, message);
     }
