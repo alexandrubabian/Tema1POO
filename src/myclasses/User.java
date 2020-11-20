@@ -73,25 +73,25 @@ public final class User {
         numberOfRatings++;
     }
 
-    public static Comparator<User> AscRating = new Comparator<User>() {
-        @Override
-        public int compare(User o1, User o2) {
-            int userNoRating1 = o1.getNumberOfRatings();
-            int userNoRating2 = o2.getNumberOfRatings();
+        public static Comparator<User> AscRating = new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                int userNoRating1 = o1.getNumberOfRatings();
+                int userNoRating2 = o2.getNumberOfRatings();
 
-            return userNoRating1 - userNoRating2;
-        }
-    };
+                return userNoRating1 - userNoRating2;
+            }
+        };
 
-    public static Comparator<User> DescRating = new Comparator<User>() {
-        @Override
-        public int compare(User o1, User o2) {
-            int userNoRating1 = o1.getNumberOfRatings();
-            int userNoRating2 = o2.getNumberOfRatings();
+        public static Comparator<User> DescRating = new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                int userNoRating1 = o1.getNumberOfRatings();
+                int userNoRating2 = o2.getNumberOfRatings();
 
-            return userNoRating2 - userNoRating1;
-        }
-    };
+                return userNoRating2 - userNoRating1;
+            }
+        };
     @Override
     public String toString() {
         return "UserInputData{" + "username='"

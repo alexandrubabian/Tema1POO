@@ -6,17 +6,13 @@ import Commands.View;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
-import fileio.ActionInputData;
-import fileio.Input;
-import fileio.InputLoader;
-import fileio.Writer;
+import fileio.*;
+import myclasses.Movie;
 import myclasses.ParsingInput;
 import myclasses.ParsingInputLoader;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import query.AverageActor;
-import query.QueryAwards;
-import query.QueryUsers;
+import query.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -77,16 +73,21 @@ public final class Main {
                               final String filePath2) throws IOException {
         InputLoader inputLoader = new InputLoader(filePath1);
         Input input = inputLoader.readData();
-        //deci input va avea actorsData,usersData,commandsData,moviesData,serialsData
-        //fiecare cu tipul lui aferent care este descris in fileio
-
         Writer fileWriter = new Writer(filePath2);
         JSONArray arrayResult = new JSONArray();
 
         //trecere in clasele mele
         ParsingInputLoader parsingInputLoader = new ParsingInputLoader(input);
         ParsingInput parsingInput = parsingInputLoader.parseAll();
-        //gata
+        //setting for each movie and serial the number of views;
+        View setup = new View(null,parsingInput, fileWriter);
+        setup.setViews();
+        Favorite setupFavorites = new Favorite(null, parsingInput, fileWriter);
+        setupFavorites.setFavorites();
+        for (SerialInputData iterator : parsingInput.getSerials()) {
+            iterator.setDuration();
+        }
+        //done
         for (ActionInputData actiune : parsingInput.getCommands()) {
             if (actiune.getActionType().equals("command")) {
                 if (actiune.getType().equals("favorite")) {
@@ -107,17 +108,53 @@ public final class Main {
                 if (actiune.getObjectType().equals("users")) {
                     QueryUsers queryUsers = new QueryUsers(actiune, parsingInput, fileWriter);
                     arrayResult.add(queryUsers.result());
-                } else {
-                    if(actiune.getObjectType().equals("actors")) {
-                        if(actiune.getCriteria().equals("average")) {
+                } else if (actiune.getObjectType().equals("actors")) {
+                        if (actiune.getCriteria().equals("average")) {
                             AverageActor averageActor = new AverageActor(actiune, parsingInput, fileWriter);
                             arrayResult.add(averageActor.result());
                         } else if (actiune.getCriteria().equals("awards")){
                             QueryAwards queryAwards = new QueryAwards(actiune, parsingInput, fileWriter);
                             arrayResult.add(queryAwards.result());
+                        } else {
+                            QueryFilter queryFilter = new QueryFilter(actiune, parsingInput, fileWriter);
+                            arrayResult.add(queryFilter.result());
                         }
+                } else if (actiune.getObjectType().equals("movies")) {
+                    if (actiune.getCriteria().equals("most_viewed")) {
+                        MostViewed_mov mostViewed_mov = new MostViewed_mov(actiune, parsingInput, fileWriter);
+                        arrayResult.add(mostViewed_mov.result());
+                    } else if (actiune.getCriteria().equals("favorite")) {
+                        FavMovies favMovies = new FavMovies(actiune, parsingInput, fileWriter);
+                        arrayResult.add(favMovies.result());
+                    } else if (actiune.getCriteria().equals("longest")) {
+                        LongMovie longMovie = new LongMovie(actiune, parsingInput, fileWriter);
+                        arrayResult.add(longMovie.result());
+                    } else if (actiune.getCriteria().equals("ratings")) {
+                        for (Movie iterator : parsingInput.getMovies()) {
+                            iterator.setRatingMediu();
+                        }
+                        RatMovies ratMovies = new RatMovies(actiune, parsingInput, fileWriter);
+                        arrayResult.add(ratMovies.result());
+                    }
+                } else if (actiune.getObjectType().equals("shows")) {
+                    if (actiune.getCriteria().equals("most_viewed")) {
+                        MostViewed_ser mostViewed_ser = new MostViewed_ser(actiune, parsingInput, fileWriter);
+                        arrayResult.add(mostViewed_ser.result());
+                    } else if (actiune.getCriteria().equals("favorite")) {
+                        FavSerials favSerials = new FavSerials(actiune, parsingInput, fileWriter);
+                        arrayResult.add(favSerials.result());
+                    } else if (actiune.getCriteria().equals("longest")) {
+                        LongSerial longSerial = new LongSerial(actiune, parsingInput, fileWriter);
+                        arrayResult.add(longSerial.result());
+                    } else if (actiune.getCriteria().equals("ratings")) {
+                        for (SerialInputData iterator : parsingInput.getSerials()) {
+                            iterator.setRatingMediu();
+                        }
+                        RatSerials ratSerials = new RatSerials(actiune, parsingInput, fileWriter);
+                        arrayResult.add(ratSerials.result());
                     }
                 }
+            }
 
             }
         //TODO add here the entry point to your implementation
@@ -125,7 +162,6 @@ public final class Main {
 
             //System.out.println(arrayResult);
 
-    }
         fileWriter.closeJSON(arrayResult);
-}
+    }
 }
