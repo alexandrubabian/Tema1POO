@@ -25,6 +25,11 @@ public final class MovieInputData extends ShowInput {
     }
 
     @Override
+    public Double medieRating() {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return "MovieInputData{" + "title= "
                 + super.getTitle() + "year= "

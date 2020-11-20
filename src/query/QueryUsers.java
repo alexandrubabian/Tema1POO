@@ -45,7 +45,7 @@ public class QueryUsers {
 
     public void setSortedUsers() {
         //this function set the mostActiveUsers
-        ArrayList<User> copy= new ArrayList<>(this.parsingInput.getUsers());
+        ArrayList<User> copy = new ArrayList<>(this.parsingInput.getUsers());
         if(this.actiune.getSortType().equals("asc")) {
             Collections.sort(copy,User.AscRating);
         } else {
@@ -58,10 +58,13 @@ public class QueryUsers {
                 }
             }
         } else {
-            for (int i = 0; i < this.actiune.getNumber(); i++) {
-                if (copy.get(i).getNumberOfRatings() != 0) {
-                    this.mostActiveUsers.add(copy.get(i).getUsername());
+            int i=0, j=0;
+            while (i < this.actiune.getNumber() && j < copy.size()) {
+                if(copy.get(j).getNumberOfRatings() != 0) {
+                    this.mostActiveUsers.add(copy.get(j).getUsername());
+                    i++;
                 }
+                j++;
             }
         }
     }
