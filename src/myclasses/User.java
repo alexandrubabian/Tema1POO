@@ -1,8 +1,9 @@
 package myclasses;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
+import fileio.SerialInputData;
+import fileio.ShowInput;
+
+import java.util.*;
 
 public final class User {
     /**
@@ -29,6 +30,8 @@ public final class User {
 
     private int numberOfRatings;
 
+    private ArrayList<Integer> appArray;
+
     public User(final String username, final String subscriptionType,
                          final Map<String, Integer> history,
                          final ArrayList<String> favoriteMovies) {
@@ -36,9 +39,14 @@ public final class User {
         this.subscriptionType = subscriptionType;
         this.favoriteMovies = favoriteMovies;
         this.history = history;
-        this.ratings=new ArrayList<>();
-        this.numberOfRatings=0;
-        this.ratedVideos=new ArrayList<>();
+        this.ratings = new ArrayList<>();
+        this.numberOfRatings = 0;
+        this.ratedVideos = new ArrayList<>();
+        this.appArray = new ArrayList<>();
+    }
+
+    public ArrayList<Integer> getAppArray() {
+        return appArray;
     }
 
     public ArrayList<String> getRatedVideos() {
@@ -73,7 +81,11 @@ public final class User {
         numberOfRatings++;
     }
 
-        public static Comparator<User> AscRating = new Comparator<User>() {
+    public void setAppArray(int size) {
+        this.appArray = new ArrayList<Integer>(Collections.nCopies(size, 0));
+    }
+
+    public static Comparator<User> AscRating = new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {
                 int userNoRating1 = o1.getNumberOfRatings();
@@ -92,6 +104,27 @@ public final class User {
                 return userNoRating2 - userNoRating1;
             }
         };
+
+    public static Comparator<User> AscName = new Comparator<User>() {
+        @Override
+        public int compare(User o1, User o2) {
+            String userName1 = o1.getUsername();
+            String userName2 = o2.getUsername();
+
+            return userName1.compareTo(userName2);
+        }
+    };
+
+    public static Comparator<User> DescName = new Comparator<User>() {
+        @Override
+        public int compare(User o1, User o2) {
+            String userName1 = o1.getUsername();
+            String userName2 = o2.getUsername();
+
+            return userName2.compareTo(userName1);
+        }
+    };
+
     @Override
     public String toString() {
         return "UserInputData{" + "username='"

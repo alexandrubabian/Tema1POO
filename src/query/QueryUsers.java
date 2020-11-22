@@ -47,9 +47,9 @@ public class QueryUsers {
         //this function set the mostActiveUsers
         ArrayList<User> copy = new ArrayList<>(this.parsingInput.getUsers());
         if(this.actiune.getSortType().equals("asc")) {
-            Collections.sort(copy,User.AscRating);
+            Collections.sort(copy,User.AscRating.thenComparing(User.AscName));
         } else {
-            Collections.sort(copy,User.DescRating);
+            Collections.sort(copy,User.DescRating.thenComparing(User.DescName));
         }
         if (this.parsingInput.getUsers().size() <this.actiune.getNumber()) {
             for (User iterator : copy) {

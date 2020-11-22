@@ -8,6 +8,7 @@ import myclasses.Actor;
 import myclasses.Movie;
 import myclasses.ParsingInput;
 import myclasses.User;
+import utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,16 +58,25 @@ public class QueryAwards {
     public void setAwardActors() {
         //trebuie sa vad daca toate alea din this.actiune.awards apartin unui actor
         ArrayList<ActorsAwards> array;
+        ArrayList<ActorsAwards> filtersActiune = new ArrayList<>();
+        for (String iterator : this.actiune.getFilters().get(3)) {
+            filtersActiune.add(Utils.stringToAwards(iterator));
+        }
         for (Actor actorIterator : this.parsingInput.getActors()) {
+            for(int number : actorIterator.getAwards().values()) {
+                actorIterator.incrementNoOfAwards(number);
+            }
             array= new ArrayList<ActorsAwards>(actorIterator.getAwards().keySet());
-            if (array.containsAll(this.actiune.getFilters().get(3))) {
+
+
+            if (array.containsAll(filtersActiune)) {
                 this.awardActors.add(actorIterator);
             }
         }
         if (this.actiune.getSortType().equals("asc")) {
-            Collections.sort(this.awardActors, Actor.AscNoAwards);
+            Collections.sort(this.awardActors, Actor.AscNoAwards.thenComparing(Actor.AscName));
         } else {
-            Collections.sort(this.awardActors, Actor.DescNoAwards);
+            Collections.sort(this.awardActors, Actor.DescNoAwards.thenComparing(Actor.DescName));
         }
         for (Actor actorIterator : this.awardActors) {
             this.nameOfAwardActors.add(actorIterator.getName());

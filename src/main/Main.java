@@ -7,12 +7,11 @@ import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
 import fileio.*;
-import myclasses.Movie;
-import myclasses.ParsingInput;
-import myclasses.ParsingInputLoader;
+import myclasses.*;
 import org.json.JSONObject;
 import org.json.simple.JSONArray;
 import query.*;
+import recommendation.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -82,11 +81,19 @@ public final class Main {
         //setting for each movie and serial the number of views;
         View setup = new View(null,parsingInput, fileWriter);
         setup.setViews();
+
+        //setting the apparition vector for the shows that every user have seen
         Favorite setupFavorites = new Favorite(null, parsingInput, fileWriter);
         setupFavorites.setFavorites();
-        for (SerialInputData iterator : parsingInput.getSerials()) {
-            iterator.setDuration();
+        for (int i = 0; i < parsingInput.getMovies().size(); i++) {
+            parsingInput.getMovies().get(i).setIndex(i);
         }
+        for (int i = 0; i < parsingInput.getSerials().size(); i++) {
+            parsingInput.getSerials().get(i).setDuration();//setting duration for the serials
+            parsingInput.getSerials().get(i).setIndex(parsingInput.getMovies().size() + i );
+        }
+
+        setup.setVideosSeen();
         //done
         for (ActionInputData actiune : parsingInput.getCommands()) {
             if (actiune.getActionType().equals("command")) {
@@ -130,9 +137,9 @@ public final class Main {
                         LongMovie longMovie = new LongMovie(actiune, parsingInput, fileWriter);
                         arrayResult.add(longMovie.result());
                     } else if (actiune.getCriteria().equals("ratings")) {
-                        for (Movie iterator : parsingInput.getMovies()) {
-                            iterator.setRatingMediu();
-                        }
+//                        for (Movie iterator : parsingInput.getMovies()) {
+//                            iterator.setRatingMediu();
+//                        }
                         RatMovies ratMovies = new RatMovies(actiune, parsingInput, fileWriter);
                         arrayResult.add(ratMovies.result());
                     }
@@ -147,12 +154,29 @@ public final class Main {
                         LongSerial longSerial = new LongSerial(actiune, parsingInput, fileWriter);
                         arrayResult.add(longSerial.result());
                     } else if (actiune.getCriteria().equals("ratings")) {
-                        for (SerialInputData iterator : parsingInput.getSerials()) {
-                            iterator.setRatingMediu();
-                        }
+//                        for (SerialInputData iterator : parsingInput.getSerials()) {
+//                            iterator.setRatingMediu();
+//                        }
                         RatSerials ratSerials = new RatSerials(actiune, parsingInput, fileWriter);
                         arrayResult.add(ratSerials.result());
                     }
+                }
+            } else if (actiune.getActionType().equals("recommendation")) {
+                if (actiune.getType().equals("standard")) {
+                    Standard standard = new Standard(actiune, parsingInput, fileWriter);
+                    arrayResult.add(standard.result());
+                } else if (actiune.getType().equals("best_unseen")) {
+                    Best_Unseen best_Unseen = new Best_Unseen(actiune, parsingInput, fileWriter);
+                    arrayResult.add(best_Unseen.result());
+                } else if (actiune.getType().equals("favorite")) {
+                    RecomFavorite recomFavorite = new RecomFavorite(actiune, parsingInput, fileWriter);
+                    arrayResult.add(recomFavorite.result());
+                } else if (actiune.getType().equals("search")) {
+                    Search search = new Search(actiune, parsingInput, fileWriter);
+                    arrayResult.add(search.result());
+                } else if (actiune.getType().equals("popular")) {
+                    Popular popular = new Popular(actiune, parsingInput, fileWriter);
+                    arrayResult.add(popular.result());
                 }
             }
 

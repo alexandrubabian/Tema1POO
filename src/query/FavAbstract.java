@@ -44,11 +44,16 @@ public abstract class FavAbstract {
     public abstract void abstractMethod();
 
     public void setMostFav(ArrayList<ShowInput> copy) {
-        Collections.sort(copy, ShowInput.DescFavorites);
+        if(this.actiune.getSortType().equals("asc")) {
+            Collections.sort(copy,ShowInput.AscFavorites.thenComparing(ShowInput.AscName));
+        } else {
+            Collections.sort(copy,ShowInput.DescFavorites.thenComparing(ShowInput.DescName));
+        }
         int i=0, j=0;
         while (i < this.actiune.getNumber() && j < copy.size()) {
+            //vezi ca poate accepta si fara favorite
             if (copy.get(j).getNoOfFavorites() != 0) {
-                if (this.actiune.getFilters().get(1) != null) {
+                if (this.actiune.getFilters().get(1).get(0) != null) {
                     if (copy.get(j).getGenres().containsAll(this.actiune.getFilters().get(1))) {
                         if (this.actiune.getFilters().get(0).get(0) == null) {
                             this.mostFav.add(copy.get(j).getTitle());
@@ -61,7 +66,7 @@ public abstract class FavAbstract {
                         }
                     }
                 } else {
-                    if (this.actiune.getFilters().get(0).get(0) == null) {
+                    if (this.actiune.getFilters().get(0).get(0) == null ) {
                         this.mostFav.add(copy.get(j).getTitle());
                         i++;
                     } else {

@@ -69,6 +69,7 @@ public class Rating {
                 //cazul in care este film nu serial
                     if (user.getHistory().containsKey(movie.getTitle())) {
                         movie.getRatings().add(this.actiune.getGrade());
+                        movie.setRatingMediu();
                         user.getRatings().add(this.actiune.getGrade());
                         user.incrementRatings();
                         user.getRatedVideos().add(this.actiune.getTitle());
@@ -87,6 +88,7 @@ public class Rating {
                     if (user.getHistory().containsKey(serial.getTitle())) {
                         serial.getSeasons().get(this.actiune.getSeasonNumber() - 1).getRatings().add(this.actiune.getGrade());
                         serial.getSeasons().get(this.actiune.getSeasonNumber() - 1).getUserThatRated().add(user.getUsername());
+                        serial.setRatingMediu();
                         user.getRatings().add(this.actiune.getGrade());
                         user.incrementRatings();
                         message = "success -> " + this.actiune.getTitle() + " was rated with " + this.actiune.getGrade() +

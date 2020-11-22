@@ -22,18 +22,20 @@ public class AverageActor {
     private final Writer fileWriter;
 
     private final ArrayList<String> bestActors;
-
+//    private String bestActors;
 
     public AverageActor(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
         this.actiune = actiune;
         this.parsingInput = parsingInput;
         this.fileWriter = fileWriter;//asta l-am adaugat pentru a putea folosi apelul de writeFile
         this.bestActors=new ArrayList<>();
+//        this.bestActors = new String();
     }
 
     public ArrayList<String> getBestActors() {
         return bestActors;
     }
+
 
     public ActionInputData getActiune() {
         return actiune;
@@ -48,16 +50,23 @@ public class AverageActor {
     }
 
     public void setBestActors() {
+        ArrayList<Actor> copy = new ArrayList<>();
         for (Actor iterator : this.parsingInput.getActors()) {
                 iterator.setAverageRating(this.parsingInput);
+                if(iterator.getAverageRating() > 0.0) {
+                    copy.add(iterator);
+                }
         }
-        ArrayList<Actor> copy = new ArrayList<>(this.parsingInput.getActors());
+
         if (this.actiune.getSortType().equals("asc")) {
             Collections.sort(copy, Actor.AscAverageRating.thenComparing(Actor.AscName));
         } else {
             Collections.sort(copy, Actor.DescAverageRating.thenComparing(Actor.DescName));
         }
-        if (this.parsingInput.getActors().size() <this.actiune.getNumber()) {
+//        for (Actor iterator : copy) {
+//                    this.bestActors.add(iterator.getAverageRating().toString());
+//        }
+        if (copy.size() <this.actiune.getNumber()) {
             for (Actor iterator : copy) {
                     this.bestActors.add(iterator.getName());
             }
@@ -72,6 +81,7 @@ public class AverageActor {
         String message = null;
         this.setBestActors();
         message = "Query result: " + this.bestActors.toString();
+//        message = "Query result: " + this.bestActors;
         return this.fileWriter.writeFile(this.actiune.getActionId(), null, message);
     }
 }

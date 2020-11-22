@@ -45,14 +45,14 @@ public class MostViewed_mov {
     public void setMostViewed() {
         ArrayList<Movie> copy = new ArrayList<>(this.parsingInput.getMovies());
         if(this.actiune.getSortType().equals("asc")) {
-            Collections.sort(copy,ShowInput.AscViews);
+            Collections.sort(copy,ShowInput.AscViews.thenComparing(ShowInput.AscName));
         } else {
-            Collections.sort(copy,ShowInput.DescViews);
+            Collections.sort(copy,ShowInput.DescViews.thenComparing(ShowInput.DescName));
         }
             int i=0, j=0;
             while (i < this.actiune.getNumber() && j < copy.size()) {
                 if (copy.get(j).getNoOfViews() != 0) {
-                    if (this.actiune.getFilters().get(1) != null) {
+                    if (this.actiune.getFilters().get(1).get(0) != null) {
                         if (copy.get(j).getGenres().containsAll(this.actiune.getFilters().get(1))) {
                             if (this.actiune.getFilters().get(0).get(0) == null) {
                                 this.mostViews.add(copy.get(j).getTitle());
@@ -78,15 +78,7 @@ public class MostViewed_mov {
                 }
                     j++;
             }
-//            for (int i = 0; i < this.actiune.getNumber(); i++) {
-//                if (copy.get(i).getNoOfViews() != 0) {
-//                    //!!!!!!!!!!!!!!!!!!!!!!!!
-//                    //mai e si cazul unde nu o sa intre in acest if si nu o sa mai adauge in numarul corect
-//                    //vezi unde ai mai scris prostia asta
-//                    //de asemenea mai de facut sa verifici in functie de an si gen
-//                    this.mostViews.add(copy.get(i).getTitle());
-//                }
-//            }
+
         }
 
     public org.json.simple.JSONObject result() throws IOException {

@@ -49,6 +49,11 @@ public final class SerialInputData extends ShowInput {
         return numberOfSeasons;
     }
 
+    @Override
+    public int getDuration() {
+        return duration;
+    }
+
     public void setDuration() {
         for (Season iterator : this.seasons) {
             this.duration += iterator.getDuration();

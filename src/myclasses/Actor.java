@@ -38,9 +38,10 @@ public final class Actor {
         this.filmography = filmography;
         this.awards = awards;
         this.averageRating=0.0;
-        for (int iterator : this.awards.values()) {
-            this.noOfawards += iterator;
-        }
+        this.noOfawards = 0;
+//        for (int iterator : this.awards.values()) {
+//            this.noOfawards += iterator;
+//        }
     }
 
     public Double getAverageRating() {
@@ -79,6 +80,10 @@ public final class Actor {
         return noOfawards;
     }
 
+    public void incrementNoOfAwards(int noToIncrement) {
+        this.noOfawards += noToIncrement;
+    }
+
     public Movie returnMovie(String title, ParsingInput parsingInput1) {
         for (Movie movie : parsingInput1.getMovies()) {
             if (movie.getTitle().equals(title)) {
@@ -100,6 +105,7 @@ public final class Actor {
         Movie movie;
         SerialInputData serial;
         int noActiveVideos = 0;
+        this.averageRating = 0.0;
         if (this.filmography.size() == 0){
             this.averageRating = 0.0;
         } else {

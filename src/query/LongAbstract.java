@@ -45,14 +45,16 @@ public abstract class LongAbstract {
 
     public void setLongest(ArrayList<ShowInput> copy) {
         if(this.actiune.getSortType().equals("asc")) {
-            Collections.sort(copy,ShowInput.AscDuration);
+            Collections.sort(copy,ShowInput.AscDuration.thenComparing(ShowInput.AscName));
         } else {
-            Collections.sort(copy,ShowInput.DescDuration);
+            Collections.sort(copy,ShowInput.DescDuration.thenComparing(ShowInput.DescName));
         }
         int i=0, j=0;
         while (i < this.actiune.getNumber() && j < copy.size()) {
+
             if (copy.get(j).getDuration() != 0) {
-                if (this.actiune.getFilters().get(1) != null) {
+                //this.longest.add(copy.get(j).getTitle());
+                if (this.actiune.getFilters().get(1).get(0) != null) {
                     if (copy.get(j).getGenres().containsAll(this.actiune.getFilters().get(1))) {
                         if (this.actiune.getFilters().get(0).get(0) == null) {
                             this.longest.add(copy.get(j).getTitle());

@@ -6,6 +6,7 @@ import myclasses.ParsingInput;
 import myclasses.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -77,6 +78,29 @@ public class View {
         }
     }
 
+    public void setVideosSeen() {
+        Movie movie;
+        SerialInputData serial;
+        for (User iterator : this.parsingInput.getUsers()) {
+            //definesc dimensiunea lui appArray
+            iterator.setAppArray(this.parsingInput.getSerials().size()+this.parsingInput.getMovies().size());
+            Iterator<Map.Entry<String, Integer>> itr = iterator.getHistory().entrySet().iterator();
+            while(itr.hasNext()) {
+                Map.Entry<String, Integer> entry = itr.next();
+                movie = returnMovie(entry.getKey());
+                if (movie !=null) {
+                    iterator.getAppArray().set(movie.getIndex(),1);
+                } else {
+                    serial = returnSerial(entry.getKey());
+                    if (serial != null) {
+                        iterator.getAppArray().set(serial.getIndex(),1);
+                    }
+                }
+            }
+        }
+    }
+
+
     public org.json.simple.JSONObject result() throws IOException {
         User user = findusername(this.actiune.getUsername());
         String message = null;
@@ -91,9 +115,15 @@ public class View {
         movie = returnMovie(this.actiune.getTitle());
         if (movie !=null) {
             movie.incrementNoOfViews(1);
+            if(user.getHistory().get(this.actiune.getTitle()) == 1) {
+                user.getAppArray().set(movie.getIndex(),1);
+            }
         } else {
             serial = returnSerial(this.actiune.getTitle());
             if (serial != null) {
+                if(user.getHistory().get(this.actiune.getTitle()) == 1) {
+                    user.getAppArray().set(serial.getIndex(),1);
+            }
                 serial.incrementNoOfViews(1);
             }
         }

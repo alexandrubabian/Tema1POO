@@ -29,13 +29,15 @@ public abstract class ShowInput {
      */
     private final ArrayList<String> genres;
 
-    private final int duration;
+    private int duration;
 
     private int noOfViews;
 
     private int noOfFavorites;
 
     private Double ratingMediu;
+
+    private int index;
 
     public ShowInput(final String title, final int year,
                      final ArrayList<String> cast, final ArrayList<String> genres) {
@@ -47,6 +49,15 @@ public abstract class ShowInput {
         this.noOfFavorites = 0;
         this.duration = 0;
         this.ratingMediu = 0.0;
+        this.index = 0;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public int getDuration() {
@@ -83,7 +94,13 @@ public abstract class ShowInput {
 
     public int getNoOfFavorites() { return noOfFavorites; }
 
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public void incrementNoOfFavorites(int noToIncrement) { noOfFavorites +=noToIncrement; }
+
 
     public abstract Double medieRating();
 
@@ -131,6 +148,15 @@ public abstract class ShowInput {
         }
     };
 
+    public static Comparator<ShowInput> AscIndex = new Comparator<ShowInput>() {
+        @Override
+        public int compare(ShowInput o1, ShowInput o2) {
+            int showIndex1 = o1.getIndex();
+            int showIndex2 = o2.getIndex();
+
+            return showIndex1 - showIndex2;
+        }
+    };
 
     public static Comparator<ShowInput> AscViews = new Comparator<ShowInput>() {
         @Override
@@ -159,6 +185,36 @@ public abstract class ShowInput {
             int showFav2 = o2.getNoOfFavorites();
 
             return showFav2 - showFav1;
+        }
+    };
+
+    public static Comparator<ShowInput> AscFavorites = new Comparator<ShowInput>() {
+        @Override
+        public int compare(ShowInput o1, ShowInput o2) {
+            int showFav1 = o1.getNoOfFavorites();
+            int showFav2 = o2.getNoOfFavorites();
+
+            return showFav1 - showFav2;
+        }
+    };
+
+    public static Comparator<ShowInput> AscName = new Comparator<ShowInput>() {
+        @Override
+        public int compare(ShowInput o1, ShowInput o2) {
+            String showName1 = o1.getTitle();
+            String showName2 = o2.getTitle();
+
+            return showName1.compareTo(showName2);
+        }
+    };
+
+    public static Comparator<ShowInput> DescName = new Comparator<ShowInput>() {
+        @Override
+        public int compare(ShowInput o1, ShowInput o2) {
+            String showName1 = o1.getTitle();
+            String showName2 = o2.getTitle();
+
+            return showName2.compareTo(showName1);
         }
     };
 }

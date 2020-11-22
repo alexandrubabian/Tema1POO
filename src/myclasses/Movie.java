@@ -10,7 +10,6 @@ public final class Movie extends ShowInput {
     /**
      * Duration in minutes of a season
      */
-    private final int duration;
 
     private final ArrayList<Double> ratings;
 
@@ -22,7 +21,7 @@ public final class Movie extends ShowInput {
                           final ArrayList<String> genres, final int year,
                           final int duration) {
         super(title, year, cast, genres);
-        this.duration = duration;
+        this.setDuration(duration);
         this.ratings = new ArrayList<>();
         //this.ratingMediu = 0.0;
         //this.noOfViews = 0;
@@ -33,9 +32,7 @@ public final class Movie extends ShowInput {
         return ratings;
     }
 
-    public int getDuration() {
-        return duration;
-    }
+
 
 //    public Double getRatingMediu() {
 //        return ratingMediu;
@@ -81,7 +78,7 @@ public final class Movie extends ShowInput {
         return "MovieInputData{" + "title= "
                 + super.getTitle() + "year= "
                 + super.getYear() + "duration= "
-                + duration + "cast {"
+                + super.getDuration() + "cast {"
                 + super.getCast() + " }\n"
                 + "genres {" + super.getGenres() + " }\n ";
     }
