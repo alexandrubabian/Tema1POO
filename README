@@ -1,0 +1,54 @@
+#Babian Stelian Alexandru - 322CD
+
+Homework 1 - VideosDB
+
+
+The project statement can be found on : 
+https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema
+
+	The main problem that I had with this project was the fact that in the 
+early stages of it, in the statement of the problem was specified to not modify
+the input classes and then the homework managers changed their minds. So I had
+started to create my own Input class, but after i found out that i could use
+base classes, I decided to modify SerialInputData, ShowInput.
+	Before iterating through the actions, I setted all the attributes that
+could help me through the process, like, setting for all the movies, serials
+users and actors, the information that I already had from the input, like
+the number of views for each show(which means movie and serials), the occurence
+of each show in the favorite list of users, an occurence array that memorates
+for each users what show they had seen or not.
+	While writing this README, I also learned in the OOP course about
+Visitor pattern and I think that in my main body, instead of all those if statements, I could implement a Visitor Pattern which could access the specific class by the parameters that I give to visit method from the pattern. 
+	My main function checksfor each action its types and by many if statements,
+it creates an instance for the object that I need. Each class that I have
+created, has a method:"result()" which returns a JSONObject with the message
+as in the refs. This JSONObject is added in the arrayResult.
+	The actions are structured in 3 types, commands, query and recommandation,
+so, for each of them I created a specific class, indexed in a specific package.
+	In the static class Utils, I have added 3 more methods to avoid duplicates:
+findusername, returnMovie, returnSerial, which, as their name says, they return
+the object by the specific username or title of show.
+	For the commands, I realised at the end of the project that I could have
+created an abstract class that could implement the duplicate methods and
+typo constructors, but as a starter in Java, I will try to learn from my 
+mistakes(also, I worked with abstract classes in Queries because I found
+out they are more efficient and I tried to think from the start as abstract
+classes). On each command, I have updated the attributes from shows, actors
+and users so I could use them correctly, even if I add a new favorite movie
+or a new view or a new rating.
+	For the queries, I needed a lot of sorting methods, and from my internet
+searching because noone teached us anything about Comparable or Comparator, 
+I decided to use Comparators and their method definition is written in
+User class, Actor class or ShowInput class. For each query, I created
+a class in the package "query" and I specified in the javadoc, what each of
+them does.
+	Recommendations require to check if the specified user has PREMIUM or 
+BASIC subscription, to let us know if the specified recommendation can be
+applied to him. The classes created for this part of project are in the 
+package "recommendation". 
+	In most of the classes where I needed to sort something, I have worked
+with a variable called "copy" and as the name says, it is a copy for what I
+need, and even I sort this variable, it won't change my input in any way.
+
+	I find this project very interesting, even if I spent like 35 hours on 
+it, I believe that it helped learn more about the OOP and Java.
