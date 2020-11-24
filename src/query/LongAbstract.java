@@ -61,7 +61,6 @@ public abstract class LongAbstract {
         while (i < this.actiune.getNumber() && j < copy.size()) {
 
             if (copy.get(j).getDuration() != 0) {
-                //this.longest.add(copy.get(j).getTitle());
                 if (this.actiune.getFilters().get(1).get(0) != null) {
                     if (copy.get(j).getGenres().containsAll(this.actiune.getFilters().get(1))) {
                         if (this.actiune.getFilters().get(0).get(0) == null) {
