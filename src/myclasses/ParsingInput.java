@@ -1,11 +1,11 @@
 package myclasses;
 
-import fileio.*;
+import fileio.ActionInputData;
+import fileio.SerialInputData;
 
-import java.security.SecureRandom;
 import java.util.List;
 
-public class ParsingInput {
+public final class ParsingInput {
 
     private final List<Actor> actors;
     /**
@@ -25,15 +25,15 @@ public class ParsingInput {
      */
     private final List<SerialInputData> serials;
 
-    public ParsingInput(final List<Actor> actors, final List <User> users,
+    public ParsingInput(final List<Actor> actors, final List<User> users,
                         final List<ActionInputData> commands,
-                        final List <Movie> movies,
-                        final List <SerialInputData> serials){
-        this.actors=actors;
-        this.movies=movies;
-        this.serials=serials;
-        this.commands=commands;
-        this.users=users;
+                        final List<Movie> movies,
+                        final List<SerialInputData> serials) {
+        this.actors = actors;
+        this.movies = movies;
+        this.serials = serials;
+        this.commands = commands;
+        this.users = users;
     }
 
     public List<Actor> getActors() {

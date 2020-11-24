@@ -7,9 +7,10 @@ import myclasses.ParsingInput;
 
 import java.util.ArrayList;
 
-public class FavSerials extends FavAbstract{
+public final class FavSerials extends FavAbstract {
 
-    public FavSerials(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+    public FavSerials(final ActionInputData actiune, final ParsingInput parsingInput,
+                      final Writer fileWriter) {
         super(actiune, parsingInput, fileWriter);
     }
 

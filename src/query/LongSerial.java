@@ -7,9 +7,10 @@ import myclasses.ParsingInput;
 
 import java.util.ArrayList;
 
-public class LongSerial extends LongAbstract{
+public final class LongSerial extends LongAbstract {
 
-    public LongSerial(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+    public LongSerial(final ActionInputData actiune, final ParsingInput parsingInput,
+                      final Writer fileWriter) {
         super(actiune, parsingInput, fileWriter);
     }
 

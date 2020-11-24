@@ -3,6 +3,10 @@ package utils;
 import actor.ActorsAwards;
 import common.Constants;
 import entertainment.Genre;
+import fileio.SerialInputData;
+import myclasses.Movie;
+import myclasses.ParsingInput;
+import myclasses.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -12,7 +16,7 @@ import java.util.LinkedHashMap;
 
 /**
  * The class contains static methods that helps with parsing.
- *
+ * <p>
  * We suggest you add your static methods here or in a similar class.
  */
 public final class Utils {
@@ -24,6 +28,7 @@ public final class Utils {
 
     /**
      * Transforms a string into an enum
+     *
      * @param genre of video
      * @return an Genre Enum
      */
@@ -52,9 +57,45 @@ public final class Utils {
             default -> null;
         };
     }
-
+    /**
+     * finding the specific user by his username
+     */
+    public static User findusername(final String username,
+                                    final ParsingInput parsingInput) {
+        for (User user : parsingInput.getUsers()) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
+    /**
+     * finding the specific movie by his title
+     */
+    public static Movie returnMovie(final String title,
+                                    final ParsingInput parsingInput) {
+        for (Movie movie : parsingInput.getMovies()) {
+            if (movie.getTitle().equals(title)) {
+                return movie;
+            }
+        }
+        return null;
+    }
+    /**
+     * finding the specific serial by his title
+     */
+    public static SerialInputData returnSerial(final String title,
+                                               final ParsingInput parsingInput) {
+        for (SerialInputData serial : parsingInput.getSerials()) {
+            if (serial.getTitle().equals(title)) {
+                return serial;
+            }
+        }
+        return null;
+    }
     /**
      * Transforms a string into an enum
+     *
      * @param award for actors
      * @return an ActorsAwards Enum
      */
@@ -71,6 +112,7 @@ public final class Utils {
 
     /**
      * Transforms an array of JSON's into an array of strings
+     *
      * @param array of JSONs
      * @return a list of strings
      */
@@ -88,6 +130,7 @@ public final class Utils {
 
     /**
      * Transforms an array of JSON's into a map
+     *
      * @param jsonActors array of JSONs
      * @return a map with ActorsAwardsa as key and Integer as value
      */
@@ -105,6 +148,7 @@ public final class Utils {
 
     /**
      * Transforms an array of JSON's into a map
+     *
      * @param movies array of JSONs
      * @return a map with String as key and Integer as value
      */

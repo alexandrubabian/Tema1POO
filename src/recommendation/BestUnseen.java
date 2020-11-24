@@ -1,10 +1,8 @@
 package recommendation;
 
 import fileio.ActionInputData;
-import fileio.SerialInputData;
 import fileio.ShowInput;
 import fileio.Writer;
-import myclasses.Movie;
 import myclasses.ParsingInput;
 import myclasses.User;
 
@@ -13,14 +11,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Best_Unseen extends RecomAbstract {
-    public Best_Unseen(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+import static utils.Utils.findusername;
+
+public class BestUnseen extends RecomAbstract {
+    public BestUnseen(final ActionInputData actiune, final ParsingInput parsingInput,
+                      final Writer fileWriter) {
         super(actiune, parsingInput, fileWriter);
     }
-
+    /**
+     * this function sort all the shows that a users had not seen descending by their ratings
+     * and then select the first one from the arrayList
+     */
     public String setNotSeenRating() {
         List<ShowInput> copy = new ArrayList<>();
-        User user = findusername(this.getActiune().getUsername());
+        User user = findusername(this.getActiune().getUsername(), this.getParsingInput());
         for (ShowInput iterator : this.getParsingInput().getMovies()) {
             if (user.getAppArray().get(iterator.getIndex()) == 0) {
                 copy.add(iterator);
@@ -31,25 +35,20 @@ public class Best_Unseen extends RecomAbstract {
                 copy.add(iterator);
             }
         }
-        Collections.sort(copy, ShowInput.DescRatings);
-        int iterator = 0;
-        if(copy.size() > 0) {
-            while (copy.size() > (iterator+1) &&
-                    copy.get(iterator).getRatingMediu().equals(copy.get(iterator+1).getRatingMediu())){
-                iterator++;
-            }
-            copy.subList(iterator+1,copy.size()).clear();
-            Collections.sort(copy,ShowInput.AscIndex);
+        Collections.sort(copy, ShowInput.descRatings.thenComparing(ShowInput.ascIndex));
+        if (copy.size() > 0) {
             return copy.get(0).getTitle();
         }
         return "nu ar fi trebuit sa ajunga aici vreodata";
 
     }
-
+    /**
+     * returning the JSONObject
+     */
     public org.json.simple.JSONObject result() throws IOException {
         String message = null;
-        User user = findusername(this.getActiune().getUsername());
-        if(user.getAppArray().contains(0)) {
+        User user = findusername(this.getActiune().getUsername(), this.getParsingInput());
+        if (user.getAppArray().contains(0)) {
             message = "BestRatedUnseenRecommendation result: " + this.setNotSeenRating();
         } else {
             message = "BestRatedUnseenRecommendation cannot be applied!";

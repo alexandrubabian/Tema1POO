@@ -18,40 +18,47 @@ public abstract class FavAbstract {
 
     private final ArrayList<String> mostFav;
 
-    public FavAbstract(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+    public FavAbstract(final ActionInputData actiune, final ParsingInput parsingInput,
+                       final Writer fileWriter) {
         this.actiune = actiune;
         this.parsingInput = parsingInput;
         this.fileWriter = fileWriter;
         this.mostFav = new ArrayList<>();
     }
 
-    public ActionInputData getActiune() {
+    public final ActionInputData getActiune() {
         return actiune;
     }
 
-    public ParsingInput getParsingInput() {
+    public final ParsingInput getParsingInput() {
         return parsingInput;
     }
 
-    public Writer getFileWriter() {
+    public final Writer getFileWriter() {
         return fileWriter;
     }
 
-    public ArrayList<String> getMostFav() {
+    public final ArrayList<String> getMostFav() {
         return mostFav;
     }
-
+    /**
+     * method to be decided in the classed that extends FavAbstract
+     */
     public abstract void abstractMethod();
-
-    public void setMostFav(ArrayList<ShowInput> copy) {
-        if(this.actiune.getSortType().equals("asc")) {
-            Collections.sort(copy,ShowInput.AscFavorites.thenComparing(ShowInput.AscName));
+  /**
+   * sorting the movies or the serials by the number of occurrence in the users favorite list, I
+   * check for their year and genre if they are the same as the filers, by a big hardcode
+   * and adding in my arraylist mostFav their title in a number that is specified
+   * in each action or the entire list of shows if the size is lower than the number
+   */
+  public void setMostFav(final ArrayList<ShowInput> copy) {
+        if (this.actiune.getSortType().equals("asc")) {
+            Collections.sort(copy, ShowInput.ascFavorites.thenComparing(ShowInput.ascName));
         } else {
-            Collections.sort(copy,ShowInput.DescFavorites.thenComparing(ShowInput.DescName));
+            Collections.sort(copy, ShowInput.descFavorites.thenComparing(ShowInput.descName));
         }
-        int i=0, j=0;
+        int i = 0, j = 0;
         while (i < this.actiune.getNumber() && j < copy.size()) {
-            //vezi ca poate accepta si fara favorite
             if (copy.get(j).getNoOfFavorites() != 0) {
                 if (this.actiune.getFilters().get(1).get(0) != null) {
                     if (copy.get(j).getGenres().containsAll(this.actiune.getFilters().get(1))) {
@@ -59,18 +66,20 @@ public abstract class FavAbstract {
                             this.mostFav.add(copy.get(j).getTitle());
                             i++;
                         } else {
-                            if (copy.get(j).getYear() == Integer.parseInt(actiune.getFilters().get(0).get(0))) {
+                            if (copy.get(j).getYear()
+                                    == Integer.parseInt(actiune.getFilters().get(0).get(0))) {
                                 this.mostFav.add(copy.get(j).getTitle());
                                 i++;
                             }
                         }
                     }
                 } else {
-                    if (this.actiune.getFilters().get(0).get(0) == null ) {
+                    if (this.actiune.getFilters().get(0).get(0) == null) {
                         this.mostFav.add(copy.get(j).getTitle());
                         i++;
                     } else {
-                        if (copy.get(j).getYear() == Integer.parseInt(actiune.getFilters().get(0).get(0))) {
+                        if (copy.get(j).getYear()
+                                == Integer.parseInt(actiune.getFilters().get(0).get(0))) {
                             this.mostFav.add(copy.get(j).getTitle());
                             i++;
                         }
@@ -80,7 +89,9 @@ public abstract class FavAbstract {
             j++;
         }
     }
-
+    /**
+     * returning the JSONObject
+     */
     public org.json.simple.JSONObject result() throws IOException {
         String message = null;
         this.abstractMethod();

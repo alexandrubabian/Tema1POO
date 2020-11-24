@@ -1,19 +1,15 @@
 package query;
 
 import fileio.ActionInputData;
-import fileio.SerialInputData;
 import fileio.Writer;
 import myclasses.Actor;
-import myclasses.Movie;
 import myclasses.ParsingInput;
-import myclasses.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
-public class AverageActor {
+public final class AverageActor {
 
     private final ActionInputData actiune;
 
@@ -22,20 +18,18 @@ public class AverageActor {
     private final Writer fileWriter;
 
     private final ArrayList<String> bestActors;
-//    private String bestActors;
 
-    public AverageActor(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+    public AverageActor(final ActionInputData actiune, final ParsingInput parsingInput,
+                        final Writer fileWriter) {
         this.actiune = actiune;
         this.parsingInput = parsingInput;
-        this.fileWriter = fileWriter;//asta l-am adaugat pentru a putea folosi apelul de writeFile
-        this.bestActors=new ArrayList<>();
-//        this.bestActors = new String();
+        this.fileWriter = fileWriter;
+        this.bestActors = new ArrayList<>();
     }
 
     public ArrayList<String> getBestActors() {
         return bestActors;
     }
-
 
     public ActionInputData getActiune() {
         return actiune;
@@ -48,40 +42,42 @@ public class AverageActor {
     public Writer getFileWriter() {
         return fileWriter;
     }
-
+    /**
+     * sorting the actors by their averageRating if it is greater than 0
+     * and setting the parameter bestActors with their names, but just in a number
+     * that is specified in each action
+     */
     public void setBestActors() {
         ArrayList<Actor> copy = new ArrayList<>();
         for (Actor iterator : this.parsingInput.getActors()) {
-                iterator.setAverageRating(this.parsingInput);
-                if(iterator.getAverageRating() > 0.0) {
-                    copy.add(iterator);
-                }
+            iterator.setAverageRating(this.parsingInput);
+            if (iterator.getAverageRating() > 0.0) {
+                copy.add(iterator);
+            }
         }
 
         if (this.actiune.getSortType().equals("asc")) {
-            Collections.sort(copy, Actor.AscAverageRating.thenComparing(Actor.AscName));
+            Collections.sort(copy, Actor.ascAverageRating.thenComparing(Actor.ascName));
         } else {
-            Collections.sort(copy, Actor.DescAverageRating.thenComparing(Actor.DescName));
+            Collections.sort(copy, Actor.descAverageRating.thenComparing(Actor.descName));
         }
-//        for (Actor iterator : copy) {
-//                    this.bestActors.add(iterator.getAverageRating().toString());
-//        }
-        if (copy.size() <this.actiune.getNumber()) {
+        if (copy.size() < this.actiune.getNumber()) {
             for (Actor iterator : copy) {
-                    this.bestActors.add(iterator.getName());
+                this.bestActors.add(iterator.getName());
             }
         } else {
             for (int i = 0; i < this.actiune.getNumber(); i++) {
-                    this.bestActors.add(copy.get(i).getName());
+                this.bestActors.add(copy.get(i).getName());
             }
         }
     }
-
+    /**
+     * returning the JSONObject
+     */
     public org.json.simple.JSONObject result() throws IOException {
         String message = null;
         this.setBestActors();
         message = "Query result: " + this.bestActors.toString();
-//        message = "Query result: " + this.bestActors;
         return this.fileWriter.writeFile(this.actiune.getActionId(), null, message);
     }
 }

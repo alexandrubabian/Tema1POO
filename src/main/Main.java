@@ -1,19 +1,36 @@
 package main;
 
-import Commands.Favorite;
-import Commands.Rating;
-import Commands.View;
+import commands.Favorite;
+import commands.Rating;
+import commands.View;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
-import fileio.*;
-import myclasses.*;
-import org.json.JSONObject;
+import fileio.ActionInputData;
+import fileio.Input;
+import fileio.InputLoader;
+import fileio.Writer;
+import myclasses.ParsingInput;
+import myclasses.ParsingInputLoader;
 import org.json.simple.JSONArray;
-import query.*;
-import recommendation.*;
+import query.AverageActor;
+import query.FavMovies;
+import query.FavSerials;
+import query.LongMovie;
+import query.LongSerial;
+import query.MostViewedMov;
+import query.MostViewedSer;
+import query.QueryAwards;
+import query.QueryFilter;
+import query.QueryUsers;
+import query.RatMovies;
+import query.RatSerials;
+import recommendation.BestUnseen;
+import recommendation.Popular;
+import recommendation.RecomFavorite;
+import recommendation.Search;
+import recommendation.Standard;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,6 +50,7 @@ public final class Main {
 
     /**
      * Call the main checker and the coding style checker
+     *
      * @param args from command line
      * @throws IOException in case of exceptions to reading / writing
      */
@@ -75,40 +93,39 @@ public final class Main {
         Writer fileWriter = new Writer(filePath2);
         JSONArray arrayResult = new JSONArray();
 
-        //trecere in clasele mele
+        //parsing the input in my own class
         ParsingInputLoader parsingInputLoader = new ParsingInputLoader(input);
         ParsingInput parsingInput = parsingInputLoader.parseAll();
         //setting for each movie and serial the number of views;
-        View setup = new View(null,parsingInput, fileWriter);
+        View setup = new View(null, parsingInput, fileWriter);
         setup.setViews();
 
-        //setting the apparition vector for the shows that every user have seen
+        //setting for each show how many times they appear in the favorite list
         Favorite setupFavorites = new Favorite(null, parsingInput, fileWriter);
         setupFavorites.setFavorites();
+
         for (int i = 0; i < parsingInput.getMovies().size(); i++) {
+            //setting index for every movie
             parsingInput.getMovies().get(i).setIndex(i);
         }
         for (int i = 0; i < parsingInput.getSerials().size(); i++) {
-            parsingInput.getSerials().get(i).setDuration();//setting duration for the serials
-            parsingInput.getSerials().get(i).setIndex(parsingInput.getMovies().size() + i );
+            //setting duration for the serials
+            parsingInput.getSerials().get(i).setDuration();
+            //setting index for every serial
+            parsingInput.getSerials().get(i).setIndex(parsingInput.getMovies().size() + i);
         }
-
+        //setting the occurrence vector for the shows that every user have seen
         setup.setVideosSeen();
-        //done
         for (ActionInputData actiune : parsingInput.getCommands()) {
             if (actiune.getActionType().equals("command")) {
                 if (actiune.getType().equals("favorite")) {
-                    //System.out.println("favorite");
-                    //am adaugat si fileWriter pt functionalitatile lui Writer
                     Favorite favorite = new Favorite(actiune, parsingInput, fileWriter);
                     arrayResult.add(favorite.result());
-                    //tine minte ca favorite.result returneaza un JSONObject, de forma id plus message
                 } else if (actiune.getType().equals("view")) {
-                    //System.out.println("view");
                     View view = new View(actiune, parsingInput, fileWriter);
                     arrayResult.add(view.result());
                 } else {
-                    Rating rating=new Rating(actiune, parsingInput, fileWriter);
+                    Rating rating = new Rating(actiune, parsingInput, fileWriter);
                     arrayResult.add(rating.result());
                 }
             } else if (actiune.getActionType().equals("query")) {
@@ -116,20 +133,24 @@ public final class Main {
                     QueryUsers queryUsers = new QueryUsers(actiune, parsingInput, fileWriter);
                     arrayResult.add(queryUsers.result());
                 } else if (actiune.getObjectType().equals("actors")) {
-                        if (actiune.getCriteria().equals("average")) {
-                            AverageActor averageActor = new AverageActor(actiune, parsingInput, fileWriter);
-                            arrayResult.add(averageActor.result());
-                        } else if (actiune.getCriteria().equals("awards")){
-                            QueryAwards queryAwards = new QueryAwards(actiune, parsingInput, fileWriter);
-                            arrayResult.add(queryAwards.result());
-                        } else {
-                            QueryFilter queryFilter = new QueryFilter(actiune, parsingInput, fileWriter);
-                            arrayResult.add(queryFilter.result());
-                        }
+                    if (actiune.getCriteria().equals("average")) {
+                        AverageActor averageActor =
+                                new AverageActor(actiune, parsingInput, fileWriter);
+                        arrayResult.add(averageActor.result());
+                    } else if (actiune.getCriteria().equals("awards")) {
+                        QueryAwards queryAwards =
+                                new QueryAwards(actiune, parsingInput, fileWriter);
+                        arrayResult.add(queryAwards.result());
+                    } else {
+                        QueryFilter queryFilter =
+                                new QueryFilter(actiune, parsingInput, fileWriter);
+                        arrayResult.add(queryFilter.result());
+                    }
                 } else if (actiune.getObjectType().equals("movies")) {
                     if (actiune.getCriteria().equals("most_viewed")) {
-                        MostViewed_mov mostViewed_mov = new MostViewed_mov(actiune, parsingInput, fileWriter);
-                        arrayResult.add(mostViewed_mov.result());
+                        MostViewedMov mostViewedMov =
+                                new MostViewedMov(actiune, parsingInput, fileWriter);
+                        arrayResult.add(mostViewedMov.result());
                     } else if (actiune.getCriteria().equals("favorite")) {
                         FavMovies favMovies = new FavMovies(actiune, parsingInput, fileWriter);
                         arrayResult.add(favMovies.result());
@@ -137,16 +158,14 @@ public final class Main {
                         LongMovie longMovie = new LongMovie(actiune, parsingInput, fileWriter);
                         arrayResult.add(longMovie.result());
                     } else if (actiune.getCriteria().equals("ratings")) {
-//                        for (Movie iterator : parsingInput.getMovies()) {
-//                            iterator.setRatingMediu();
-//                        }
                         RatMovies ratMovies = new RatMovies(actiune, parsingInput, fileWriter);
                         arrayResult.add(ratMovies.result());
                     }
                 } else if (actiune.getObjectType().equals("shows")) {
                     if (actiune.getCriteria().equals("most_viewed")) {
-                        MostViewed_ser mostViewed_ser = new MostViewed_ser(actiune, parsingInput, fileWriter);
-                        arrayResult.add(mostViewed_ser.result());
+                        MostViewedSer mostViewedSer =
+                                new MostViewedSer(actiune, parsingInput, fileWriter);
+                        arrayResult.add(mostViewedSer.result());
                     } else if (actiune.getCriteria().equals("favorite")) {
                         FavSerials favSerials = new FavSerials(actiune, parsingInput, fileWriter);
                         arrayResult.add(favSerials.result());
@@ -154,9 +173,6 @@ public final class Main {
                         LongSerial longSerial = new LongSerial(actiune, parsingInput, fileWriter);
                         arrayResult.add(longSerial.result());
                     } else if (actiune.getCriteria().equals("ratings")) {
-//                        for (SerialInputData iterator : parsingInput.getSerials()) {
-//                            iterator.setRatingMediu();
-//                        }
                         RatSerials ratSerials = new RatSerials(actiune, parsingInput, fileWriter);
                         arrayResult.add(ratSerials.result());
                     }
@@ -166,10 +182,11 @@ public final class Main {
                     Standard standard = new Standard(actiune, parsingInput, fileWriter);
                     arrayResult.add(standard.result());
                 } else if (actiune.getType().equals("best_unseen")) {
-                    Best_Unseen best_Unseen = new Best_Unseen(actiune, parsingInput, fileWriter);
-                    arrayResult.add(best_Unseen.result());
+                    BestUnseen bestUnseen = new BestUnseen(actiune, parsingInput, fileWriter);
+                    arrayResult.add(bestUnseen.result());
                 } else if (actiune.getType().equals("favorite")) {
-                    RecomFavorite recomFavorite = new RecomFavorite(actiune, parsingInput, fileWriter);
+                    RecomFavorite recomFavorite =
+                            new RecomFavorite(actiune, parsingInput, fileWriter);
                     arrayResult.add(recomFavorite.result());
                 } else if (actiune.getType().equals("search")) {
                     Search search = new Search(actiune, parsingInput, fileWriter);
@@ -179,13 +196,7 @@ public final class Main {
                     arrayResult.add(popular.result());
                 }
             }
-
-            }
-        //TODO add here the entry point to your implementation
-        //arrayResult.add(JSONObject)
-
-            //System.out.println(arrayResult);
-
+        }
         fileWriter.closeJSON(arrayResult);
     }
 }

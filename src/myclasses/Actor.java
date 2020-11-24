@@ -6,7 +6,9 @@ import fileio.SerialInputData;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
+
+import static utils.Utils.returnMovie;
+import static utils.Utils.returnSerial;
 
 public final class Actor {
     /**
@@ -24,20 +26,20 @@ public final class Actor {
     /**
      * awards won by the actor
      */
-    private Map<ActorsAwards, Integer> awards;
+    private final Map<ActorsAwards, Integer> awards;
 
     private Double averageRating;
 
     private int noOfawards;
 
     public Actor(final String name, final String careerDescription,
-                          final ArrayList<String> filmography,
-                          final Map<ActorsAwards, Integer> awards) {
+                 final ArrayList<String> filmography,
+                 final Map<ActorsAwards, Integer> awards) {
         this.name = name;
         this.careerDescription = careerDescription;
         this.filmography = filmography;
         this.awards = awards;
-        this.averageRating=0.0;
+        this.averageRating = 0.0;
         this.noOfawards = 0;
 //        for (int iterator : this.awards.values()) {
 //            this.noOfawards += iterator;
@@ -79,34 +81,22 @@ public final class Actor {
     public int getNoOfawards() {
         return noOfawards;
     }
-
-    public void incrementNoOfAwards(int noToIncrement) {
+    /**
+     * incrementing the number of awards
+     */
+    public void incrementNoOfAwards(final int noToIncrement) {
         this.noOfawards += noToIncrement;
     }
-
-    public Movie returnMovie(String title, ParsingInput parsingInput1) {
-        for (Movie movie : parsingInput1.getMovies()) {
-            if (movie.getTitle().equals(title)) {
-                return movie;
-            }
-        }
-        return null;
-    }
-    public SerialInputData returnSerial(String title, ParsingInput parsingInput1) {
-        for (SerialInputData serial : parsingInput1.getSerials()) {
-            if (serial.getTitle().equals(title)) {
-                return serial;
-            }
-        }
-        return null;
-    }
-
-    public void setAverageRating(ParsingInput parsingInput) {
+    /**
+     * setting the average rating for each actor by iterating through their filmography
+     * and determine the number of active videos(that has more than one rating)
+     */
+    public void setAverageRating(final ParsingInput parsingInput) {
         Movie movie;
         SerialInputData serial;
         int noActiveVideos = 0;
         this.averageRating = 0.0;
-        if (this.filmography.size() == 0){
+        if (this.filmography.size() == 0) {
             this.averageRating = 0.0;
         } else {
             for (String iterator : this.filmography) {
@@ -126,9 +116,9 @@ public final class Actor {
         }
     }
 
-    public static Comparator<Actor> AscAverageRating = new Comparator<Actor>() {
+    public static Comparator<Actor> ascAverageRating = new Comparator<Actor>() {
         @Override
-        public int compare(Actor o1, Actor o2) {
+        public int compare(final Actor o1, final Actor o2) {
             double actorAvRating1 = o1.getAverageRating();
             double actorAvRating2 = o2.getAverageRating();
 
@@ -136,9 +126,9 @@ public final class Actor {
         }
     };
 
-    public static Comparator<Actor> DescAverageRating = new Comparator<Actor>() {
+    public static Comparator<Actor> descAverageRating = new Comparator<Actor>() {
         @Override
-        public int compare(Actor o1, Actor o2) {
+        public int compare(final Actor o1, final Actor o2) {
             double actorAvRating1 = o1.getAverageRating();
             double actorAvRating2 = o2.getAverageRating();
 
@@ -146,9 +136,9 @@ public final class Actor {
         }
     };
 
-    public static Comparator<Actor> AscName = new Comparator<Actor>() {
+    public static Comparator<Actor> ascName = new Comparator<Actor>() {
         @Override
-        public int compare(Actor o1, Actor o2) {
+        public int compare(final Actor o1, final Actor o2) {
             String actorName1 = o1.getName();
             String actorName2 = o2.getName();
 
@@ -156,9 +146,9 @@ public final class Actor {
         }
     };
 
-    public static Comparator<Actor> DescName = new Comparator<Actor>() {
+    public static Comparator<Actor> descName = new Comparator<Actor>() {
         @Override
-        public int compare(Actor o1, Actor o2) {
+        public int compare(final Actor o1, final Actor o2) {
             String actorName1 = o1.getName();
             String actorName2 = o2.getName();
 
@@ -166,9 +156,9 @@ public final class Actor {
         }
     };
 
-    public static Comparator<Actor> AscNoAwards = new Comparator<Actor>() {
+    public static Comparator<Actor> ascNoAwards = new Comparator<Actor>() {
         @Override
-        public int compare(Actor o1, Actor o2) {
+        public int compare(final Actor o1, final Actor o2) {
             int actorNoAwards1 = o1.getNoOfawards();
             int actorNoAwards2 = o2.getNoOfawards();
 
@@ -176,9 +166,9 @@ public final class Actor {
         }
     };
 
-    public static Comparator<Actor> DescNoAwards = new Comparator<Actor>() {
+    public static Comparator<Actor> descNoAwards = new Comparator<Actor>() {
         @Override
-        public int compare(Actor o1, Actor o2) {
+        public int compare(final Actor o1, final Actor o2) {
             int actorNoAwards1 = o1.getNoOfawards();
             int actorNoAwards2 = o2.getNoOfawards();
 

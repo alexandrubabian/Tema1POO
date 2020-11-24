@@ -8,13 +8,21 @@ import fileio.UserInputData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParsingInputLoader {
+public final class ParsingInputLoader {
 
-    public Input input;
-    public ParsingInputLoader(Input input){
-        this.input=input;
+    private Input input;
+
+    public ParsingInputLoader(final Input input) {
+        this.input = input;
     }
 
+    public Input getInput() {
+        return input;
+    }
+    /**
+     * parsing all the input from the object input of class Input into my own class
+     * ParsingInput
+     */
     public ParsingInput parseAll() {
         List<Actor> actors = new ArrayList<>();
         List<Movie> movies = new ArrayList<>();
@@ -33,12 +41,13 @@ public class ParsingInputLoader {
             }
         }
 
-        if (this.input.getUsers() !=null) {
+        if (this.input.getUsers() != null) {
             for (UserInputData iterator : this.input.getUsers()) {
                 users.add(new User(iterator.getUsername(), iterator.getSubscriptionType(),
                         iterator.getHistory(), iterator.getFavoriteMovies()));
             }
         }
-        return new ParsingInput(actors, users, this.input.getCommands(), movies, this.input.getSerials());
+        return new ParsingInput(actors, users, this.input.getCommands(), movies,
+                this.input.getSerials());
     }
 }

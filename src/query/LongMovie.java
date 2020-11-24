@@ -7,9 +7,10 @@ import myclasses.ParsingInput;
 
 import java.util.ArrayList;
 
-public class LongMovie extends LongAbstract{
+public final class LongMovie extends LongAbstract {
 
-    public LongMovie(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+    public LongMovie(final ActionInputData actiune, final ParsingInput parsingInput,
+                     final Writer fileWriter) {
         super(actiune, parsingInput, fileWriter);
     }
 

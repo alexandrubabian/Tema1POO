@@ -1,19 +1,16 @@
 package query;
 
-import actor.ActorsAwards;
 import fileio.ActionInputData;
 import fileio.SerialInputData;
 import fileio.ShowInput;
 import fileio.Writer;
-import myclasses.Actor;
-import myclasses.Movie;
 import myclasses.ParsingInput;
-import myclasses.User;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
-public class MostViewed_ser {
+public final class MostViewedSer {
 
     private final ActionInputData actiune;
 
@@ -23,10 +20,11 @@ public class MostViewed_ser {
 
     private final ArrayList<String> mostViews;
 
-    public MostViewed_ser(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+    public MostViewedSer(final ActionInputData actiune, final ParsingInput parsingInput,
+                         final Writer fileWriter) {
         this.actiune = actiune;
         this.parsingInput = parsingInput;
-        this.fileWriter = fileWriter;//asta l-am adaugat pentru a putea folosi apelul de writeFile
+        this.fileWriter = fileWriter;
         this.mostViews = new ArrayList<>();
     }
 
@@ -41,15 +39,20 @@ public class MostViewed_ser {
     public Writer getFileWriter() {
         return fileWriter;
     }
-
+    /**
+     * sorting the serials by the number of views, I
+     * check for their year and genre if they are the same as the filers, by a big hardcode and
+     * adding in my arraylist mostViews their title in a number that is specified in each action or
+     * the entire list of shows if the size is lower than the number
+     */
     public void setMostViewed() {
         ArrayList<SerialInputData> copy = new ArrayList<>(this.parsingInput.getSerials());
-        if(this.actiune.getSortType().equals("asc")) {
-            Collections.sort(copy,ShowInput.AscViews.thenComparing(ShowInput.AscName));
+        if (this.actiune.getSortType().equals("asc")) {
+            Collections.sort(copy, ShowInput.ascViews.thenComparing(ShowInput.ascName));
         } else {
-            Collections.sort(copy,ShowInput.DescViews.thenComparing(ShowInput.DescName));
+            Collections.sort(copy, ShowInput.descViews.thenComparing(ShowInput.descName));
         }
-        int i=0, j=0;
+        int i = 0, j = 0;
         while (i < this.actiune.getNumber() && j < copy.size()) {
             if (copy.get(j).getNoOfViews() != 0) {
                 if (this.actiune.getFilters().get(1).get(0) != null) {
@@ -58,7 +61,8 @@ public class MostViewed_ser {
                             this.mostViews.add(copy.get(j).getTitle());
                             i++;
                         } else {
-                            if (copy.get(j).getYear() == Integer.parseInt(actiune.getFilters().get(0).get(0))) {
+                            if (copy.get(j).getYear()
+                                    == Integer.parseInt(actiune.getFilters().get(0).get(0))) {
                                 this.mostViews.add(copy.get(j).getTitle());
                                 i++;
                             }
@@ -69,7 +73,8 @@ public class MostViewed_ser {
                         this.mostViews.add(copy.get(j).getTitle());
                         i++;
                     } else {
-                        if (copy.get(j).getYear() == Integer.parseInt(actiune.getFilters().get(0).get(0))) {
+                        if (copy.get(j).getYear()
+                                == Integer.parseInt(actiune.getFilters().get(0).get(0))) {
                             this.mostViews.add(copy.get(j).getTitle());
                             i++;
                         }
@@ -78,17 +83,11 @@ public class MostViewed_ser {
             }
             j++;
         }
-//            for (int i = 0; i < this.actiune.getNumber(); i++) {
-//                if (copy.get(i).getNoOfViews() != 0) {
-//                    //!!!!!!!!!!!!!!!!!!!!!!!!
-//                    //mai e si cazul unde nu o sa intre in acest if si nu o sa mai adauge in numarul corect
-//                    //vezi unde ai mai scris prostia asta
-//                    //de asemenea mai de facut sa verifici in functie de an si gen
-//                    this.mostViews.add(copy.get(i).getTitle());
-//                }
-//            }
-    }
 
+    }
+    /**
+     * returning the JSONObject
+     */
     public org.json.simple.JSONObject result() throws IOException {
         String message = null;
         this.setMostViewed();

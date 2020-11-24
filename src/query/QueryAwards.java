@@ -2,20 +2,16 @@ package query;
 
 import actor.ActorsAwards;
 import fileio.ActionInputData;
-import fileio.SerialInputData;
 import fileio.Writer;
 import myclasses.Actor;
-import myclasses.Movie;
 import myclasses.ParsingInput;
-import myclasses.User;
 import utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
-public class QueryAwards {
+public final class QueryAwards {
 
     private final ActionInputData actiune;
 
@@ -27,10 +23,11 @@ public class QueryAwards {
 
     private final ArrayList<String> nameOfAwardActors;
 
-    public QueryAwards(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+    public QueryAwards(final ActionInputData actiune, final ParsingInput parsingInput,
+                       final Writer fileWriter) {
         this.actiune = actiune;
         this.parsingInput = parsingInput;
-        this.fileWriter = fileWriter;//asta l-am adaugat pentru a putea folosi apelul de writeFile
+        this.fileWriter = fileWriter;
         this.awardActors = new ArrayList<>();
         this.nameOfAwardActors = new ArrayList<>();
     }
@@ -54,19 +51,23 @@ public class QueryAwards {
     public ArrayList<String> getNameOfAwardActors() {
         return nameOfAwardActors;
     }
-
+    /**
+     * First, setting the parameter for each actor, the number of awards that he has
+     * Then checking for each actor that he has all the awards specified in each action
+     * Then sorting the actors with right awards by their number of awards
+     */
     public void setAwardActors() {
-        //trebuie sa vad daca toate alea din this.actiune.awards apartin unui actor
+        final int magicNumber = 3;
         ArrayList<ActorsAwards> array;
         ArrayList<ActorsAwards> filtersActiune = new ArrayList<>();
-        for (String iterator : this.actiune.getFilters().get(3)) {
+        for (String iterator : this.actiune.getFilters().get(magicNumber)) {
             filtersActiune.add(Utils.stringToAwards(iterator));
         }
         for (Actor actorIterator : this.parsingInput.getActors()) {
-            for(int number : actorIterator.getAwards().values()) {
+            for (int number : actorIterator.getAwards().values()) {
                 actorIterator.incrementNoOfAwards(number);
             }
-            array= new ArrayList<ActorsAwards>(actorIterator.getAwards().keySet());
+            array = new ArrayList<ActorsAwards>(actorIterator.getAwards().keySet());
 
 
             if (array.containsAll(filtersActiune)) {
@@ -74,15 +75,17 @@ public class QueryAwards {
             }
         }
         if (this.actiune.getSortType().equals("asc")) {
-            Collections.sort(this.awardActors, Actor.AscNoAwards.thenComparing(Actor.AscName));
+            Collections.sort(this.awardActors, Actor.ascNoAwards.thenComparing(Actor.ascName));
         } else {
-            Collections.sort(this.awardActors, Actor.DescNoAwards.thenComparing(Actor.DescName));
+            Collections.sort(this.awardActors, Actor.descNoAwards.thenComparing(Actor.descName));
         }
         for (Actor actorIterator : this.awardActors) {
             this.nameOfAwardActors.add(actorIterator.getName());
         }
     }
-
+    /**
+     * returning the JSONObject
+     */
     public org.json.simple.JSONObject result() throws IOException {
         String message = null;
         this.setAwardActors();
