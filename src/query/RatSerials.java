@@ -7,14 +7,15 @@ import myclasses.ParsingInput;
 
 import java.util.ArrayList;
 
-public class RatSerials extends RatAbstract{
-    public RatSerials(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+public final class RatSerials extends RatAbstract {
+    public RatSerials(final ActionInputData actiune, final ParsingInput parsingInput,
+                      final Writer fileWriter) {
         super(actiune, parsingInput, fileWriter);
     }
 
     @Override
     public void abstractMethod() {
-        ArrayList<ShowInput> copy=new ArrayList<>(this.getParsingInput().getSerials());
+        ArrayList<ShowInput> copy = new ArrayList<>(this.getParsingInput().getSerials());
         this.setMostRated(copy);
     }
 }

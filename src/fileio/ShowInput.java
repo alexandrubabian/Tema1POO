@@ -1,8 +1,5 @@
 package fileio;
 
-import myclasses.Actor;
-import myclasses.User;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -29,13 +26,15 @@ public abstract class ShowInput {
      */
     private final ArrayList<String> genres;
 
-    private final int duration;
+    private int duration;
 
     private int noOfViews;
 
     private int noOfFavorites;
 
     private Double ratingMediu;
+
+    private int index;
 
     public ShowInput(final String title, final int year,
                      final ArrayList<String> cast, final ArrayList<String> genres) {
@@ -47,13 +46,24 @@ public abstract class ShowInput {
         this.noOfFavorites = 0;
         this.duration = 0;
         this.ratingMediu = 0.0;
+        this.index = 0;
     }
 
+    public final void setDuration(final int duration) {
+        this.duration = duration;
+    }
+
+    public final int getIndex() {
+        return index;
+    }
+    /**
+     * Method that is overrided in SerialInputData
+     */
     public int getDuration() {
         return duration;
     }
 
-    public Double getRatingMediu() {
+    public final Double getRatingMediu() {
         return ratingMediu;
     }
 
@@ -73,27 +83,44 @@ public abstract class ShowInput {
         return genres;
     }
 
-    public int getNoOfViews() {
+    public final int getNoOfViews() {
         return noOfViews;
     }
-
-    public void incrementNoOfViews(int noToIncrement) {
+    /**
+     * incrementing the number of views of a show
+     */
+    public void incrementNoOfViews(final int noToIncrement) {
         noOfViews += noToIncrement;
     }
 
-    public int getNoOfFavorites() { return noOfFavorites; }
+    public final int getNoOfFavorites() {
+        return noOfFavorites;
+    }
 
-    public void incrementNoOfFavorites(int noToIncrement) { noOfFavorites +=noToIncrement; }
 
+    public final void setIndex(final int index) {
+        this.index = index;
+    }
+    /**
+     * incrementing the number of times that a show is found in a user list
+     */
+    public final void incrementNoOfFavorites(final int noToIncrement) {
+        noOfFavorites += noToIncrement;
+    }
+    /**
+     * to be decided in the movie or serialInputData
+     */
     public abstract Double medieRating();
-
-    public void setRatingMediu() {
+    /**
+     * setter of average rating
+     */
+    public final void setRatingMediu() {
         this.ratingMediu = this.medieRating();
     }
 
-    public static Comparator<ShowInput> AscRatings = new Comparator<ShowInput>() {
+    public static Comparator<ShowInput> ascRatings = new Comparator<ShowInput>() {
         @Override
-        public int compare(ShowInput o1, ShowInput o2) {
+        public int compare(final ShowInput o1, final ShowInput o2) {
             double movieAvRating1 = o1.getRatingMediu();
             double movieAvRating2 = o2.getRatingMediu();
 
@@ -101,9 +128,9 @@ public abstract class ShowInput {
         }
     };
 
-    public static Comparator<ShowInput> DescRatings = new Comparator<ShowInput>() {
+    public static Comparator<ShowInput> descRatings = new Comparator<ShowInput>() {
         @Override
-        public int compare(ShowInput o1, ShowInput o2) {
+        public int compare(final ShowInput o1, final ShowInput o2) {
             double movieAvRating1 = o1.getRatingMediu();
             double movieAvRating2 = o2.getRatingMediu();
 
@@ -111,9 +138,9 @@ public abstract class ShowInput {
         }
     };
 
-    public static Comparator<ShowInput> AscDuration = new Comparator<ShowInput>() {
+    public static Comparator<ShowInput> ascDuration = new Comparator<ShowInput>() {
         @Override
-        public int compare(ShowInput o1, ShowInput o2) {
+        public int compare(final ShowInput o1, final ShowInput o2) {
             int showDuration1 = o1.getDuration();
             int showDuration2 = o2.getDuration();
 
@@ -121,9 +148,9 @@ public abstract class ShowInput {
         }
     };
 
-    public static Comparator<ShowInput> DescDuration = new Comparator<ShowInput>() {
+    public static Comparator<ShowInput> descDuration = new Comparator<ShowInput>() {
         @Override
-        public int compare(ShowInput o1, ShowInput o2) {
+        public int compare(final ShowInput o1, final ShowInput o2) {
             int showDuration1 = o1.getDuration();
             int showDuration2 = o2.getDuration();
 
@@ -131,10 +158,19 @@ public abstract class ShowInput {
         }
     };
 
-
-    public static Comparator<ShowInput> AscViews = new Comparator<ShowInput>() {
+    public static Comparator<ShowInput> ascIndex = new Comparator<ShowInput>() {
         @Override
-        public int compare(ShowInput o1, ShowInput o2) {
+        public int compare(final ShowInput o1, final ShowInput o2) {
+            int showIndex1 = o1.getIndex();
+            int showIndex2 = o2.getIndex();
+
+            return showIndex1 - showIndex2;
+        }
+    };
+
+    public static Comparator<ShowInput> ascViews = new Comparator<ShowInput>() {
+        @Override
+        public int compare(final ShowInput o1, final ShowInput o2) {
             int showViews1 = o1.getNoOfViews();
             int showViews2 = o2.getNoOfViews();
 
@@ -142,9 +178,9 @@ public abstract class ShowInput {
         }
     };
 
-    public static Comparator<ShowInput> DescViews = new Comparator<ShowInput>() {
+    public static Comparator<ShowInput> descViews = new Comparator<ShowInput>() {
         @Override
-        public int compare(ShowInput o1, ShowInput o2) {
+        public int compare(final ShowInput o1, final ShowInput o2) {
             int showViews1 = o1.getNoOfViews();
             int showViews2 = o2.getNoOfViews();
 
@@ -152,13 +188,43 @@ public abstract class ShowInput {
         }
     };
 
-    public static Comparator<ShowInput> DescFavorites = new Comparator<ShowInput>() {
+    public static Comparator<ShowInput> descFavorites = new Comparator<ShowInput>() {
         @Override
-        public int compare(ShowInput o1, ShowInput o2) {
+        public int compare(final ShowInput o1, final ShowInput o2) {
             int showFav1 = o1.getNoOfFavorites();
             int showFav2 = o2.getNoOfFavorites();
 
             return showFav2 - showFav1;
+        }
+    };
+
+    public static Comparator<ShowInput> ascFavorites = new Comparator<ShowInput>() {
+        @Override
+        public int compare(final ShowInput o1, final ShowInput o2) {
+            int showFav1 = o1.getNoOfFavorites();
+            int showFav2 = o2.getNoOfFavorites();
+
+            return showFav1 - showFav2;
+        }
+    };
+
+    public static Comparator<ShowInput> ascName = new Comparator<ShowInput>() {
+        @Override
+        public int compare(final ShowInput o1, final ShowInput o2) {
+            String showName1 = o1.getTitle();
+            String showName2 = o2.getTitle();
+
+            return showName1.compareTo(showName2);
+        }
+    };
+
+    public static Comparator<ShowInput> descName = new Comparator<ShowInput>() {
+        @Override
+        public int compare(final ShowInput o1, final ShowInput o2) {
+            String showName1 = o1.getTitle();
+            String showName2 = o2.getTitle();
+
+            return showName2.compareTo(showName1);
         }
     };
 }

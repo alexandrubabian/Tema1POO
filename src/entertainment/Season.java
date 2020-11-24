@@ -22,13 +22,13 @@ public final class Season {
      */
     private List<Double> ratings;
 
-    private ArrayList<String> userThatRated;
+    private final ArrayList<String> userThatRated;
 
     public Season(final int currentSeason, final int duration) {
         this.currentSeason = currentSeason;
         this.duration = duration;
         this.ratings = new ArrayList<>();
-        this.userThatRated=new ArrayList<>();
+        this.userThatRated = new ArrayList<>();
     }
 
     public ArrayList<String> getUserThatRated() {
@@ -50,13 +50,15 @@ public final class Season {
     public void setRatings(final List<Double> ratings) {
         this.ratings = ratings;
     }
-
+    /**
+     * returning the average rating for each season
+     */
     public Double medieRating() {
         Double sum = 0.0;
-        sum=this.ratings.stream().mapToDouble(a -> a).sum();
+        sum = this.ratings.stream().mapToDouble(a -> a).sum();
         Double medie = 0.0;
-        if (this.ratings.size() != 0){
-            medie=sum/this.ratings.size();
+        if (this.ratings.size() != 0) {
+            medie = sum / this.ratings.size();
         }
         return medie;
     }

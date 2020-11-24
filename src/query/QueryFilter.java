@@ -1,18 +1,17 @@
 package query;
 
-import actor.ActorsAwards;
 import fileio.ActionInputData;
-import fileio.SerialInputData;
 import fileio.Writer;
 import myclasses.Actor;
-import myclasses.Movie;
 import myclasses.ParsingInput;
-import myclasses.User;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-public class QueryFilter {
+public final class QueryFilter {
 
     private final ActionInputData actiune;
 
@@ -23,10 +22,12 @@ public class QueryFilter {
     private final ArrayList<Actor> filteredActors;
 
     private final ArrayList<String> nameFilteredActors;
-    public QueryFilter(ActionInputData actiune, ParsingInput parsingInput, Writer fileWriter) {
+
+    public QueryFilter(final ActionInputData actiune, final ParsingInput parsingInput,
+                       final Writer fileWriter) {
         this.actiune = actiune;
         this.parsingInput = parsingInput;
-        this.fileWriter = fileWriter;//asta l-am adaugat pentru a putea folosi apelul de writeFile
+        this.fileWriter = fileWriter;
         this.filteredActors = new ArrayList<>();
         this.nameFilteredActors = new ArrayList<>();
     }
@@ -42,7 +43,11 @@ public class QueryFilter {
     public Writer getFileWriter() {
         return fileWriter;
     }
-
+    /**
+     * Transforming the parameter description in an array of words, i check for this array
+     * if it has all key words that are specified in each action and then sorting them
+     * alphabetically
+     */
     public void setFilteredActors() {
         String[] words;
         List<String> array;
@@ -58,16 +63,18 @@ public class QueryFilter {
                 this.filteredActors.add(iterator);
             }
         }
-        if(this.actiune.getSortType().equals("asc")) {
-            Collections.sort(this.filteredActors, Actor.AscName);
+        if (this.actiune.getSortType().equals("asc")) {
+            Collections.sort(this.filteredActors, Actor.ascName);
         } else {
-            Collections.sort(this.filteredActors, Actor.DescName);
+            Collections.sort(this.filteredActors, Actor.descName);
         }
         for (Actor iterator : this.filteredActors) {
             this.nameFilteredActors.add(iterator.getName());
         }
     }
-
+    /**
+     * returning the JSONObject
+     */
     public org.json.simple.JSONObject result() throws IOException {
         String message = null;
         this.setFilteredActors();
